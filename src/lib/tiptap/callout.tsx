@@ -4,6 +4,14 @@ import { NodeViewWrapper, NodeViewContent } from '@tiptap/react'
 import { AlertCircle, Info, AlertTriangle, CheckCircle, ChevronDown } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    callout: {
+      setCallout: (attributes: { type: string }) => ReturnType
+    }
+  }
+}
+
 const CalloutComponent = ({ node, updateAttributes }: any) => {
   const type = node.attrs.type || 'info'
   const [showTypeMenu, setShowTypeMenu] = useState(false)
@@ -27,7 +35,7 @@ const CalloutComponent = ({ node, updateAttributes }: any) => {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+      if (menuRef.current && !menuRef.current.contains(e.target as globalThis.Node)) {
         setShowTypeMenu(false)
       }
     }
@@ -88,8 +96,8 @@ export const Callout = Node.create({
     return {
       type: {
         default: 'info',
-        parseHTML: element => element.getAttribute('data-type'),
-        renderHTML: attributes => {
+        parseHTML: (element: HTMLElement) => element.getAttribute('data-type'),
+        renderHTML: (attributes: Record<string, any>) => {
           return {
             'data-type': attributes.type,
           }
@@ -106,7 +114,7 @@ export const Callout = Node.create({
     ]
   },
 
-  renderHTML({ HTMLAttributes }) {
+  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, any> }) {
     return ['div', mergeAttributes(HTMLAttributes, { 'data-callout': '' }), 0]
   },
 
@@ -116,12 +124,14 @@ export const Callout = Node.create({
 
   addCommands() {
     return {
-      setCallout: (attributes) => ({ commands }) => {
-        return commands.insertContent({
-          type: this.name,
-          attrs: attributes,
-        })
-      },
+      setCallout:
+        (attributes: { type: string }) =>
+        ({ commands }) => {
+          return commands.insertContent({
+            type: this.name,
+            attrs: attributes,
+          })
+        },
     }
   },
 })

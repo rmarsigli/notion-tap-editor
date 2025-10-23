@@ -192,7 +192,6 @@ export const SlashCommands = Extension.create({
               }
             }
 
-            const centerX = windowWidth / 2
             const idealLeft = rect.left
 
             if (idealLeft + menuWidth > windowWidth - margin) {
@@ -242,13 +241,14 @@ export const SlashCommands = Extension.create({
               }
             },
 
-            onKeyDown(props) {
+            onKeyDown(props: any) {
               if (props.event.key === 'Escape') {
                 element.style.display = 'none'
                 return true
               }
 
-              return component.ref?.onKeyDown(props)
+              // @ts-expect-error - component ref may have onKeyDown
+              return component.ref?.onKeyDown?.(props) || false
             },
 
             onExit() {

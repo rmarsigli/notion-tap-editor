@@ -4,6 +4,14 @@ import { NodeViewWrapper } from '@tiptap/react'
 import { Upload, AlignLeft, AlignCenter, AlignRight, Maximize2, ChevronDown, RefreshCw } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    imageUpload: {
+      setImageUpload: () => ReturnType
+    }
+  }
+}
+
 const ImageUploadComponent = ({ node, updateAttributes }: any) => {
   const src = node.attrs.src
   const align = node.attrs.align || 'center'
@@ -22,7 +30,7 @@ const ImageUploadComponent = ({ node, updateAttributes }: any) => {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+      if (menuRef.current && !menuRef.current.contains(e.target as globalThis.Node)) {
         setShowAlignMenu(false)
       }
     }
@@ -190,7 +198,7 @@ export const ImageUpload = Node.create({
     ]
   },
 
-  renderHTML({ HTMLAttributes }) {
+  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, any> }) {
     return ['div', mergeAttributes(HTMLAttributes, { 'data-image-upload': '' })]
   },
 
@@ -200,12 +208,14 @@ export const ImageUpload = Node.create({
 
   addCommands() {
     return {
-      setImageUpload: () => ({ commands }) => {
-        return commands.insertContent({
-          type: this.name,
-          attrs: { src: null, align: 'center' },
-        })
-      },
+      setImageUpload:
+        () =>
+        ({ commands }) => {
+          return commands.insertContent({
+            type: this.name,
+            attrs: { src: null, align: 'center' },
+          })
+        },
     }
   },
 })

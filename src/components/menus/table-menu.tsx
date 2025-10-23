@@ -37,7 +37,6 @@ export function TableMenu({ editor }: TableMenuProps) {
       const { from } = selection
 
       const coords = editor.view.coordsAtPos(from)
-      const editorRect = editor.view.dom.getBoundingClientRect()
 
       const left = coords.left
       const top = coords.top - element.offsetHeight - 8

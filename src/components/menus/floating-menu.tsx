@@ -13,14 +13,13 @@ interface FloatingMenuProps {
 export function FloatingMenu({ editor, commands }: FloatingMenuProps) {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
-  const [showButton, setShowButton] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
 
   useEffect(() => {
     if (!buttonRef.current) return
 
     const updateButton = () => {
-      const { selection, doc } = editor.state
+      const { selection } = editor.state
       const { $from } = selection
       const node = $from.parent
 
@@ -44,11 +43,8 @@ export function FloatingMenu({ editor, commands }: FloatingMenuProps) {
         buttonRef.current!.style.position = 'absolute'
         buttonRef.current!.style.top = `${coords.top}px`
         buttonRef.current!.style.left = `${editorRect.left - 32}px`
-
-        setShowButton(true)
       } else {
         buttonRef.current!.style.display = 'none'
-        setShowButton(false)
         setShowMenu(false)
       }
     }

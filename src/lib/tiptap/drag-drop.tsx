@@ -10,11 +10,9 @@ export const DragDrop = Extension.create({
         key: new PluginKey('dragDrop'),
         props: {
           handleDOMEvents: {
-            drop(view, event) {
+            drop(view: any, event: any) {
               const dragHandle = (event.target as HTMLElement).closest('[data-drag-handle]')
               if (!dragHandle) {
-                const editorElement = view.dom
-                const rect = editorElement.getBoundingClientRect()
                 const posAtCoords = view.posAtCoords({
                   left: event.clientX,
                   top: event.clientY,
@@ -27,7 +25,7 @@ export const DragDrop = Extension.create({
               }
               return false
             },
-            dragover(view, event) {
+            dragover(_view: any, event: any) {
               event.preventDefault()
               return false
             },

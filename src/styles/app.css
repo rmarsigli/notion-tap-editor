@@ -1,60 +1,60 @@
 @import 'prosemirror-view/style/prosemirror.css';
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-  }
+@theme {
+  --color-background: 0 0% 100%;
+  --color-foreground: 222.2 84% 4.9%;
+  --color-card: 0 0% 100%;
+  --color-card-foreground: 222.2 84% 4.9%;
+  --color-popover: 0 0% 100%;
+  --color-popover-foreground: 222.2 84% 4.9%;
+  --color-primary: 222.2 47.4% 11.2%;
+  --color-primary-foreground: 210 40% 98%;
+  --color-secondary: 210 40% 96.1%;
+  --color-secondary-foreground: 222.2 47.4% 11.2%;
+  --color-muted: 210 40% 96.1%;
+  --color-muted-foreground: 215.4 16.3% 46.9%;
+  --color-accent: 210 40% 96.1%;
+  --color-accent-foreground: 222.2 47.4% 11.2%;
+  --color-destructive: 0 84.2% 60.2%;
+  --color-destructive-foreground: 210 40% 98%;
+  --color-border: 214.3 31.8% 91.4%;
+  --color-input: 214.3 31.8% 91.4%;
+  --color-ring: 222.2 84% 4.9%;
+  --radius: 0.5rem;
+}
 
+@layer base {
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --color-background: 222.2 84% 4.9%;
+    --color-foreground: 210 40% 98%;
+    --color-card: 222.2 84% 4.9%;
+    --color-card-foreground: 210 40% 98%;
+    --color-popover: 222.2 84% 4.9%;
+    --color-popover-foreground: 210 40% 98%;
+    --color-primary: 210 40% 98%;
+    --color-primary-foreground: 222.2 47.4% 11.2%;
+    --color-secondary: 217.2 32.6% 17.5%;
+    --color-secondary-foreground: 210 40% 98%;
+    --color-muted: 217.2 32.6% 17.5%;
+    --color-muted-foreground: 215 20.2% 65.1%;
+    --color-accent: 217.2 32.6% 17.5%;
+    --color-accent-foreground: 210 40% 98%;
+    --color-destructive: 0 62.8% 30.6%;
+    --color-destructive-foreground: 210 40% 98%;
+    --color-border: 217.2 32.6% 17.5%;
+    --color-input: 217.2 32.6% 17.5%;
+    --color-ring: 212.7 26.8% 83.9%;
   }
 }
 
 @layer base {
   * {
-    border-color: hsl(var(--border));
+    border-color: hsl(var(--color-border));
   }
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: hsl(var(--color-background));
+    color: hsl(var(--color-foreground));
   }
 }
 
@@ -78,7 +78,7 @@
 }
 
 .ProseMirror hr.ProseMirror-selectednode::before {
-  background-color: hsl(var(--primary));
+  background-color: hsl(var(--color-primary));
 }
 
 .ProseMirror h1 {
@@ -164,13 +164,13 @@
   right: 0;
   height: 2px;
   transform: translateY(-50%);
-  background-color: hsl(var(--border));
+  background-color: hsl(var(--color-border));
   cursor: grab;
 }
 
 .ProseMirror hr:hover::before,
 .ProseMirror hr.focused-block::before {
-  background-color: hsl(var(--primary));
+  background-color: hsl(var(--color-primary));
 }
 
 /* Remove outline from hr when focused */
@@ -211,20 +211,20 @@
   height: 1.125rem;
   margin: 0;
   border-radius: 0.25rem;
-  border: 2px solid hsl(var(--border));
+  border: 2px solid hsl(var(--color-border));
   appearance: none;
   background-color: white;
   transition: all 0.15s;
 }
 
 .ProseMirror ul[data-type="taskList"] input[type="checkbox"]:hover {
-  border-color: hsl(var(--muted-foreground));
-  background-color: hsl(var(--muted) / 0.5);
+  border-color: hsl(var(--color-muted-foreground));
+  background-color: hsl(var(--color-muted) / 0.5);
 }
 
 .ProseMirror ul[data-type="taskList"] input[type="checkbox"]:checked {
-  background-color: hsl(var(--primary));
-  border-color: hsl(var(--primary));
+  background-color: hsl(var(--color-primary));
+  border-color: hsl(var(--color-primary));
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3E%3Cpath d='M13.5 3.5L6 11l-3.5-3.5'/%3E%3C/svg%3E");
   background-size: 0.75rem;
   background-position: center;
@@ -233,7 +233,7 @@
 
 .ProseMirror ul[data-type="taskList"] li[data-checked="true"] > div {
   text-decoration: line-through;
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--color-muted-foreground));
 }
 
 .slash-commands-menu::-webkit-scrollbar {
@@ -245,12 +245,12 @@
 }
 
 .slash-commands-menu::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.3);
+  background: hsl(var(--color-muted-foreground) / 0.3);
   border-radius: 3px;
 }
 
 .slash-commands-menu::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
+  background: hsl(var(--color-muted-foreground) / 0.5);
 }
 
 /* Drag handle improvements for lists */
@@ -421,7 +421,7 @@
 .ProseMirror table td,
 .ProseMirror table th {
   min-width: 1em;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid hsl(var(--color-border));
   padding: 0.5rem 0.75rem;
   vertical-align: top;
   box-sizing: border-box;
@@ -431,11 +431,11 @@
 .ProseMirror table th {
   font-weight: bold;
   text-align: left;
-  background-color: hsl(var(--muted) / 0.5);
+  background-color: hsl(var(--color-muted) / 0.5);
 }
 
 .ProseMirror table .selectedCell {
-  background-color: hsl(var(--primary) / 0.1);
+  background-color: hsl(var(--color-primary) / 0.1);
 }
 
 .ProseMirror table .column-resize-handle {
@@ -444,7 +444,7 @@
   top: 0;
   bottom: -2px;
   width: 4px;
-  background-color: hsl(var(--primary));
+  background-color: hsl(var(--color-primary));
   pointer-events: none;
 }
 
@@ -498,7 +498,7 @@
   left: 0;
   margin-top: 0.5rem;
   background: white;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid hsl(var(--color-border));
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   padding: 0.25rem;
@@ -507,8 +507,8 @@
 }
 
 .dark .ProseMirror .callout-type-menu {
-  background: hsl(var(--card));
-  border-color: hsl(var(--border));
+  background: hsl(var(--color-card));
+  border-color: hsl(var(--color-border));
 }
 
 .ProseMirror .callout-type-option {
@@ -531,7 +531,7 @@
 }
 
 .ProseMirror .callout-type-option.active {
-  background-color: hsl(var(--primary) / 0.1);
+  background-color: hsl(var(--color-primary) / 0.1);
 }
 
 /* Info type */

@@ -13,7 +13,7 @@ export const DragDropHandler = Extension.create({
       new Plugin({
         key: new PluginKey('dragDropHandler'),
         props: {
-          handleDrop(view, event, slice, moved) {
+          handleDrop(view: any, event: any, _slice: any, moved: boolean) {
             // If this is not a moved operation (internal drag), allow default behavior
             if (!moved) {
               return false
