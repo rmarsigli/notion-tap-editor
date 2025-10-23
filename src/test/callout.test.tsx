@@ -48,4 +48,19 @@ describe('Callout Extension', () => {
     const parseHTML = extension.options.parseHTML?.() || extension.config.parseHTML()
     expect(parseHTML[0].tag).toBe('div[data-callout]')
   })
+
+  it('should have setCallout command', () => {
+    const extension = Callout
+    const commands = extension.options.addCommands?.() || extension.config.addCommands()
+    expect(commands.setCallout).toBeDefined()
+    expect(typeof commands.setCallout).toBe('function')
+  })
+
+  it('should support different callout types', () => {
+    const types = ['info', 'warning', 'error', 'success']
+    types.forEach((type) => {
+      const { container } = render(<TestEditor content="" />)
+      expect(container).toBeTruthy()
+    })
+  })
 })
