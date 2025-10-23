@@ -19,8 +19,12 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
   const caption = node.attrs.caption || ''
   const [showAlignMenu, setShowAlignMenu] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+  const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
 
   const alignments = {
     left: { icon: AlignLeft, label: 'Left' },
@@ -45,15 +49,39 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
     }
   }, [showAlignMenu])
 
+  const validateFile = (file: File): string | null => {
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      return 'Invalid file type. Please upload a JPEG, PNG, GIF, or WebP image.'
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      return `File size exceeds 10MB. Your file is ${(file.size / 1024 / 1024).toFixed(2)}MB.`
+    }
+    return null
+  }
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        updateAttributes({ src: event.target?.result })
-      }
-      reader.readAsDataURL(file)
+    if (!file) return
+
+    setError(null)
+    const validationError = validateFile(file)
+    if (validationError) {
+      setError(validationError)
+      return
     }
+
+    const reader = new FileReader()
+    reader.onerror = () => {
+      setError('Failed to read file. Please try again.')
+    }
+    reader.onload = (event) => {
+      const result = event.target?.result
+      if (result) {
+        updateAttributes({ src: result })
+        setError(null)
+      }
+    }
+    reader.readAsDataURL(file)
   }
 
   const handleDrop = (e: React.DragEvent) => {
@@ -61,13 +89,27 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
     setIsDragging(false)
 
     const file = e.dataTransfer.files?.[0]
-    if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        updateAttributes({ src: event.target?.result })
-      }
-      reader.readAsDataURL(file)
+    if (!file) return
+
+    setError(null)
+    const validationError = validateFile(file)
+    if (validationError) {
+      setError(validationError)
+      return
     }
+
+    const reader = new FileReader()
+    reader.onerror = () => {
+      setError('Failed to read file. Please try again.')
+    }
+    reader.onload = (event) => {
+      const result = event.target?.result
+      if (result) {
+        updateAttributes({ src: result })
+        setError(null)
+      }
+    }
+    reader.readAsDataURL(file)
   }
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -83,7 +125,7 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
     return (
       <NodeViewWrapper className="image-upload-wrapper">
         <div
-          className={`image-upload-placeholder ${isDragging ? 'dragging' : ''}`}
+          className={`image-upload-placeholder ${isDragging ? 'dragging' : ''} ${error ? 'error' : ''}`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -91,11 +133,14 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
         >
           <Upload className="w-8 h-8 mb-2 opacity-50" />
           <p className="text-sm opacity-70 mb-1">Click to upload or drag and drop</p>
-          <p className="text-xs opacity-50">PNG, JPG, GIF up to 10MB</p>
+          <p className="text-xs opacity-50">PNG, JPG, GIF, WebP up to 10MB</p>
+          {error && (
+            <p className="text-xs text-red-600 mt-2 font-medium">{error}</p>
+          )}
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept="image/jpeg,image/png,image/gif,image/webp"
             onChange={handleFileChange}
             className="hidden"
           />

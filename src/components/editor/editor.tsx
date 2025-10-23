@@ -17,6 +17,7 @@ import { FocusBlock } from '@/lib/tiptap/focus-block'
 import { Callout } from '@/lib/tiptap/callout'
 import { TableKeyboardShortcuts } from '@/lib/tiptap/table-keyboard-shortcuts'
 import { ImageUpload } from '@/lib/tiptap/image-upload'
+import { ErrorBoundary } from '../error-boundary'
 
 export function Editor() {
   const editor = useEditor({
@@ -68,14 +69,16 @@ export function Editor() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <div className="bg-card rounded-lg border border-border p-6 pl-12 relative">
-        <BubbleMenu editor={editor} />
-        <TableMenu editor={editor} />
-        <FloatingMenu editor={editor} commands={suggestionItems} />
-        <DragHandleWrapper editor={editor} />
-        <EditorContent editor={editor} />
+    <ErrorBoundary>
+      <div className="w-full max-w-4xl mx-auto">
+        <div className="bg-card rounded-lg border border-border p-6 pl-12 relative">
+          <BubbleMenu editor={editor} />
+          <TableMenu editor={editor} />
+          <FloatingMenu editor={editor} commands={suggestionItems} />
+          <DragHandleWrapper editor={editor} />
+          <EditorContent editor={editor} />
+        </div>
       </div>
-    </div>
+    </ErrorBoundary>
   )
 }
