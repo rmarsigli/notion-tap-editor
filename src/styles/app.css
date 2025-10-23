@@ -1,0 +1,653 @@
+@import 'prosemirror-view/style/prosemirror.css';
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+}
+
+.ProseMirror {
+  @apply outline-none min-h-[200px];
+}
+
+/* Highlight focused block */
+.ProseMirror .focused-block:not(hr) {
+  @apply outline outline-1 outline-border/50 -outline-offset-1 rounded bg-muted/5;
+}
+
+/* Highlight selected node (for images, etc) */
+.ProseMirror .ProseMirror-selectednode:not(hr) {
+  @apply outline outline-2 outline-primary/50 -outline-offset-2 rounded;
+}
+
+/* HR should only show blue line when selected */
+.ProseMirror hr.ProseMirror-selectednode {
+  @apply outline-none;
+}
+
+.ProseMirror hr.ProseMirror-selectednode::before {
+  background-color: hsl(var(--primary));
+}
+
+.ProseMirror h1 {
+  @apply text-4xl font-bold my-4;
+}
+
+.ProseMirror h2 {
+  @apply text-2xl font-bold my-3;
+}
+
+.ProseMirror h3 {
+  @apply text-xl font-bold my-2;
+}
+
+.ProseMirror p {
+  @apply my-2;
+}
+
+.ProseMirror ul:not([data-type="taskList"]),
+.ProseMirror ol {
+  padding-left: 1.75rem;
+  margin: 0.75rem 0;
+}
+
+.ProseMirror ul:not([data-type="taskList"]) {
+  list-style-type: disc;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+}
+
+.ProseMirror li {
+  margin: 0.375rem 0;
+  padding-left: 0.25rem;
+}
+
+.ProseMirror ul:not([data-type="taskList"]) > li,
+.ProseMirror ol > li {
+  padding-left: 0.5rem;
+}
+
+.ProseMirror strong {
+  @apply font-bold;
+}
+
+.ProseMirror em {
+  @apply italic;
+}
+
+.ProseMirror code {
+  @apply bg-muted px-1.5 py-0.5 rounded font-mono text-sm;
+}
+
+.ProseMirror pre {
+  @apply bg-muted rounded-lg p-4 my-4;
+}
+
+.ProseMirror pre code {
+  @apply bg-transparent p-0;
+}
+
+.ProseMirror blockquote {
+  @apply border-l-[3px] border-border pl-4 my-4 text-muted-foreground;
+}
+
+.ProseMirror hr {
+  border: none;
+  margin: 2.3rem 0;
+  padding: 1rem 0;
+  cursor: grab;
+  position: relative;
+  height: 0;
+  background-color: transparent;
+}
+
+/* Visual line in the middle of the clickable area */
+.ProseMirror hr::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+  background-color: hsl(var(--border));
+  cursor: grab;
+}
+
+.ProseMirror hr:hover::before,
+.ProseMirror hr.focused-block::before {
+  background-color: hsl(var(--primary));
+}
+
+/* Remove outline from hr when focused */
+.ProseMirror hr.focused-block {
+  outline: none;
+}
+
+.ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0.25rem;
+  margin: 0.75rem 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.25rem 0;
+  padding-left: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li > label {
+  flex: 0 0 auto;
+  margin: 0;
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+
+.ProseMirror ul[data-type="taskList"] li > div {
+  flex: 1 1 auto;
+  padding: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"] {
+  cursor: pointer;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0;
+  border-radius: 0.25rem;
+  border: 2px solid hsl(var(--border));
+  appearance: none;
+  background-color: white;
+  transition: all 0.15s;
+}
+
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"]:hover {
+  border-color: hsl(var(--muted-foreground));
+  background-color: hsl(var(--muted) / 0.5);
+}
+
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"]:checked {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3E%3Cpath d='M13.5 3.5L6 11l-3.5-3.5'/%3E%3C/svg%3E");
+  background-size: 0.75rem;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.ProseMirror ul[data-type="taskList"] li[data-checked="true"] > div {
+  text-decoration: line-through;
+  color: hsl(var(--muted-foreground));
+}
+
+.slash-commands-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.slash-commands-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.slash-commands-menu::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 3px;
+}
+
+.slash-commands-menu::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Drag handle improvements for lists */
+.ProseMirror ul:not([data-type="taskList"]),
+.ProseMirror ol {
+  position: relative;
+}
+
+/* Make list items easier to grab */
+.ProseMirror ul:not([data-type="taskList"]) > li,
+.ProseMirror ol > li {
+  position: relative;
+}
+
+/* Increase the clickable area on the left side of lists for drag handle */
+.ProseMirror ul:not([data-type="taskList"])::before,
+.ProseMirror ol::before {
+  content: '';
+  position: absolute;
+  left: -2.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2.5rem;
+  pointer-events: auto;
+}
+
+/* Image Upload styles */
+.ProseMirror .image-upload-wrapper {
+  @apply my-4;
+}
+
+.ProseMirror .image-upload-wrapper.align-left .image-container {
+  @apply ml-0 mr-auto;
+}
+
+.ProseMirror .image-upload-wrapper.align-center .image-container {
+  @apply mx-auto;
+}
+
+.ProseMirror .image-upload-wrapper.align-right .image-container {
+  @apply ml-auto mr-0;
+}
+
+.ProseMirror .image-upload-wrapper.align-full .image-container {
+  @apply w-full max-w-full;
+}
+
+.ProseMirror .image-upload-wrapper.align-full .uploaded-image {
+  @apply w-full;
+}
+
+.ProseMirror .image-upload-placeholder {
+  @apply border-2 border-dashed border-border rounded-lg py-12 px-8 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 bg-muted/10;
+}
+
+.ProseMirror .image-upload-placeholder:hover {
+  @apply border-primary bg-primary/5;
+}
+
+.ProseMirror .image-upload-placeholder.dragging {
+  @apply border-primary bg-primary/10 scale-[1.02];
+}
+
+.ProseMirror .image-container {
+  @apply relative max-w-full inline-block;
+}
+
+.ProseMirror .uploaded-image {
+  @apply max-w-full h-auto block rounded-lg shadow-sm outline-none! border-none!;
+}
+
+.ProseMirror .image-controls {
+  @apply absolute top-3 right-3 flex gap-2 opacity-0 transition-opacity duration-200;
+}
+
+.ProseMirror .image-container:hover .image-controls {
+  @apply opacity-100;
+}
+
+.ProseMirror .image-align-button,
+.ProseMirror .image-replace-button {
+  @apply flex items-center gap-1 px-3 py-2 bg-white border border-border rounded-md text-sm cursor-pointer transition-all duration-150 shadow-md h-9 min-h-9;
+}
+
+.dark .ProseMirror .image-align-button,
+.dark .ProseMirror .image-replace-button {
+  @apply bg-card border-border;
+}
+
+.ProseMirror .image-align-button:hover,
+.ProseMirror .image-replace-button:hover {
+  @apply bg-muted;
+}
+
+.ProseMirror .image-align-menu {
+  @apply absolute top-full right-0 mt-2 bg-white border border-border rounded-lg shadow-lg p-1 min-w-[140px] z-50;
+}
+
+.dark .ProseMirror .image-align-menu {
+  @apply bg-card border-border;
+}
+
+.ProseMirror .image-align-option {
+  @apply flex items-center gap-2 w-full px-3 py-2 border-none bg-transparent cursor-pointer rounded-md text-sm text-left transition-colors duration-150 text-foreground;
+}
+
+.ProseMirror .image-align-option:hover {
+  @apply bg-muted;
+}
+
+.ProseMirror .image-align-option.active {
+  @apply bg-primary/10 text-primary;
+}
+
+/* Remove default outline when image is selected */
+.ProseMirror .image-upload-wrapper.ProseMirror-selectednode {
+  @apply outline-none!;
+}
+
+.ProseMirror .image-upload-wrapper.ProseMirror-selectednode .image-container {
+  @apply outline-none!;
+}
+
+.ProseMirror .image-upload-wrapper.ProseMirror-selectednode .uploaded-image {
+  @apply outline-none! shadow-sm;
+}
+
+/* Show controls when image wrapper is selected */
+.ProseMirror .image-upload-wrapper.ProseMirror-selectednode .image-controls {
+  @apply opacity-100;
+}
+
+/* Also remove outline from focused block on image wrapper */
+.ProseMirror .image-upload-wrapper.focused-block {
+  @apply outline-none! bg-transparent!;
+}
+
+/* Image caption */
+.ProseMirror .image-caption {
+  @apply block w-full mt-0 py-1 border-none bg-transparent text-sm text-muted-foreground text-center outline-none transition-colors duration-150;
+}
+
+.ProseMirror .image-caption:focus {
+  @apply text-foreground;
+}
+
+.ProseMirror .image-caption::placeholder {
+  @apply text-muted-foreground/50;
+}
+
+.ProseMirror .image-upload-wrapper.align-left .image-caption {
+  @apply text-left;
+}
+
+.ProseMirror .image-upload-wrapper.align-right .image-caption {
+  @apply text-right;
+}
+
+/* Table styles */
+.ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.ProseMirror table td,
+.ProseMirror table th {
+  min-width: 1em;
+  border: 1px solid hsl(var(--border));
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.ProseMirror table th {
+  font-weight: bold;
+  text-align: left;
+  background-color: hsl(var(--muted) / 0.5);
+}
+
+.ProseMirror table .selectedCell {
+  background-color: hsl(var(--primary) / 0.1);
+}
+
+.ProseMirror table .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: -2px;
+  width: 4px;
+  background-color: hsl(var(--primary));
+  pointer-events: none;
+}
+
+.ProseMirror table p {
+  margin: 0;
+}
+
+/* Callout styles */
+.ProseMirror .callout {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  border-left: 4px solid;
+  align-items: flex-start;
+  position: relative;
+}
+
+.ProseMirror .callout-icon-wrapper {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  padding-top: 0.125rem;
+  position: relative;
+}
+
+.ProseMirror .callout-icon-button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.ProseMirror .callout-icon-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark .ProseMirror .callout-icon-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.ProseMirror .callout-type-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  background: white;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  padding: 0.25rem;
+  min-width: 140px;
+  z-index: 50;
+}
+
+.dark .ProseMirror .callout-type-menu {
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
+}
+
+.ProseMirror .callout-type-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.ProseMirror .callout-type-option:hover {
+  transform: translateX(2px);
+}
+
+.ProseMirror .callout-type-option.active {
+  background-color: hsl(var(--primary) / 0.1);
+}
+
+/* Info type */
+.ProseMirror .callout-type-option:nth-child(1) {
+  color: hsl(210, 100%, 40%);
+}
+
+.ProseMirror .callout-type-option:nth-child(1):hover {
+  background-color: hsl(210, 100%, 97%);
+}
+
+.dark .ProseMirror .callout-type-option:nth-child(1) {
+  color: hsl(210, 100%, 70%);
+}
+
+.dark .ProseMirror .callout-type-option:nth-child(1):hover {
+  background-color: hsl(210, 100%, 10%);
+}
+
+/* Warning type */
+.ProseMirror .callout-type-option:nth-child(2) {
+  color: hsl(45, 100%, 35%);
+}
+
+.ProseMirror .callout-type-option:nth-child(2):hover {
+  background-color: hsl(45, 100%, 97%);
+}
+
+.dark .ProseMirror .callout-type-option:nth-child(2) {
+  color: hsl(45, 100%, 70%);
+}
+
+.dark .ProseMirror .callout-type-option:nth-child(2):hover {
+  background-color: hsl(45, 100%, 10%);
+}
+
+/* Error type */
+.ProseMirror .callout-type-option:nth-child(3) {
+  color: hsl(0, 100%, 45%);
+}
+
+.ProseMirror .callout-type-option:nth-child(3):hover {
+  background-color: hsl(0, 100%, 97%);
+}
+
+.dark .ProseMirror .callout-type-option:nth-child(3) {
+  color: hsl(0, 100%, 70%);
+}
+
+.dark .ProseMirror .callout-type-option:nth-child(3):hover {
+  background-color: hsl(0, 100%, 10%);
+}
+
+/* Success type */
+.ProseMirror .callout-type-option:nth-child(4) {
+  color: hsl(142, 76%, 30%);
+}
+
+.ProseMirror .callout-type-option:nth-child(4):hover {
+  background-color: hsl(142, 76%, 97%);
+}
+
+.dark .ProseMirror .callout-type-option:nth-child(4) {
+  color: hsl(142, 76%, 70%);
+}
+
+.dark .ProseMirror .callout-type-option:nth-child(4):hover {
+  background-color: hsl(142, 76%, 10%);
+}
+
+.ProseMirror .callout-content {
+  flex: 1 1 auto;
+  outline: none;
+}
+
+.ProseMirror .callout-info {
+  background-color: hsl(210, 100%, 97%);
+  border-left-color: hsl(210, 100%, 50%);
+  color: hsl(210, 100%, 30%);
+}
+
+.ProseMirror .callout-warning {
+  background-color: hsl(45, 100%, 97%);
+  border-left-color: hsl(45, 100%, 50%);
+  color: hsl(45, 100%, 25%);
+}
+
+.ProseMirror .callout-error {
+  background-color: hsl(0, 100%, 97%);
+  border-left-color: hsl(0, 100%, 50%);
+  color: hsl(0, 100%, 30%);
+}
+
+.ProseMirror .callout-success {
+  background-color: hsl(142, 76%, 97%);
+  border-left-color: hsl(142, 76%, 36%);
+  color: hsl(142, 76%, 20%);
+}
+
+.dark .ProseMirror .callout-info {
+  background-color: hsl(210, 100%, 10%);
+  color: hsl(210, 100%, 80%);
+}
+
+.dark .ProseMirror .callout-warning {
+  background-color: hsl(45, 100%, 10%);
+  color: hsl(45, 100%, 80%);
+}
+
+.dark .ProseMirror .callout-error {
+  background-color: hsl(0, 100%, 10%);
+  color: hsl(0, 100%, 80%);
+}
+
+.dark .ProseMirror .callout-success {
+  background-color: hsl(142, 76%, 10%);
+  color: hsl(142, 76%, 80%);
+}
+
