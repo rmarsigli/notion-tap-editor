@@ -10,7 +10,8 @@ import {
   Quote,
   Code,
   Minus,
-  Text
+  Text,
+  LucideIcon
 } from 'lucide-react'
 
 interface SlashCommandsListProps {
@@ -18,7 +19,7 @@ interface SlashCommandsListProps {
   command: (item: SlashCommand) => void
 }
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   Text: Text,
   H1: Heading1,
   H2: Heading2,

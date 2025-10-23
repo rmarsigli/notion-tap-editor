@@ -1,5 +1,6 @@
 import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { EditorView } from '@tiptap/pm/view'
 
 export const DragDrop = Extension.create({
   name: 'dragDrop',
@@ -10,7 +11,7 @@ export const DragDrop = Extension.create({
         key: new PluginKey('dragDrop'),
         props: {
           handleDOMEvents: {
-            drop(view: any, event: any) {
+            drop(view: EditorView, event: DragEvent) {
               const dragHandle = (event.target as HTMLElement).closest('[data-drag-handle]')
               if (!dragHandle) {
                 const posAtCoords = view.posAtCoords({
@@ -25,7 +26,7 @@ export const DragDrop = Extension.create({
               }
               return false
             },
-            dragover(_view: any, event: any) {
+            dragover(_view: EditorView, event: DragEvent) {
               event.preventDefault()
               return false
             },

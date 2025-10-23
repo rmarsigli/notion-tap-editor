@@ -1,5 +1,7 @@
 import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { EditorView } from '@tiptap/pm/view'
+import { Slice } from '@tiptap/pm/model'
 
 /**
  * Extension to prevent dragging blocks INTO list items
@@ -13,7 +15,7 @@ export const DragDropHandler = Extension.create({
       new Plugin({
         key: new PluginKey('dragDropHandler'),
         props: {
-          handleDrop(view: any, event: any, _slice: any, moved: boolean) {
+          handleDrop(view: EditorView, event: DragEvent, _slice: Slice, moved: boolean) {
             // If this is not a moved operation (internal drag), allow default behavior
             if (!moved) {
               return false

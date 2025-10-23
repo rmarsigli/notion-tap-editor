@@ -3,6 +3,7 @@ import { ReactNodeViewRenderer } from '@tiptap/react'
 import { NodeViewWrapper, NodeViewContent } from '@tiptap/react'
 import { AlertCircle, Info, AlertTriangle, CheckCircle, ChevronDown } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
+import type { CalloutNodeViewProps } from './types'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -12,7 +13,7 @@ declare module '@tiptap/core' {
   }
 }
 
-const CalloutComponent = ({ node, updateAttributes }: any) => {
+const CalloutComponent = ({ node, updateAttributes }: CalloutNodeViewProps) => {
   const type = node.attrs.type || 'info'
   const [showTypeMenu, setShowTypeMenu] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -97,7 +98,7 @@ export const Callout = Node.create({
       type: {
         default: 'info',
         parseHTML: (element: HTMLElement) => element.getAttribute('data-type'),
-        renderHTML: (attributes: Record<string, any>) => {
+        renderHTML: (attributes: Record<string, string>) => {
           return {
             'data-type': attributes.type,
           }
@@ -114,7 +115,7 @@ export const Callout = Node.create({
     ]
   },
 
-  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, any> }) {
+  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, string> }) {
     return ['div', mergeAttributes(HTMLAttributes, { 'data-callout': '' }), 0]
   },
 

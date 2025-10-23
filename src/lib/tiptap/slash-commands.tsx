@@ -2,12 +2,13 @@ import { Extension } from '@tiptap/core'
 import { ReactRenderer } from '@tiptap/react'
 import Suggestion from '@tiptap/suggestion'
 import { SlashCommandsList } from '@/components/menus/slash-commands-list'
+import type { SlashCommandProps, SuggestionKeyDownProps } from './types'
 
 export interface SlashCommand {
   title: string
   description: string
   icon: string
-  command: ({ editor, range }: any) => void
+  command: (props: SlashCommandProps) => void
 }
 
 export const suggestionItems: SlashCommand[] = [
@@ -241,7 +242,7 @@ export const SlashCommands = Extension.create({
               }
             },
 
-            onKeyDown(props: any) {
+            onKeyDown(props: SuggestionKeyDownProps) {
               if (props.event.key === 'Escape') {
                 element.style.display = 'none'
                 return true

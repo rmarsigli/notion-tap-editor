@@ -3,6 +3,7 @@ import { ReactNodeViewRenderer } from '@tiptap/react'
 import { NodeViewWrapper } from '@tiptap/react'
 import { Upload, AlignLeft, AlignCenter, AlignRight, Maximize2, ChevronDown, RefreshCw } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
+import type { ImageUploadNodeViewProps } from './types'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -12,7 +13,7 @@ declare module '@tiptap/core' {
   }
 }
 
-const ImageUploadComponent = ({ node, updateAttributes }: any) => {
+const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewProps) => {
   const src = node.attrs.src
   const align = node.attrs.align || 'center'
   const caption = node.attrs.caption || ''
@@ -198,7 +199,7 @@ export const ImageUpload = Node.create({
     ]
   },
 
-  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, any> }) {
+  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, string> }) {
     return ['div', mergeAttributes(HTMLAttributes, { 'data-image-upload': '' })]
   },
 
