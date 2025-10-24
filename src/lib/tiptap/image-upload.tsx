@@ -4,6 +4,7 @@ import { NodeViewWrapper } from '@tiptap/react'
 import { Upload, AlignLeft, AlignCenter, AlignRight, Maximize2, ChevronDown, RefreshCw } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import type { ImageUploadNodeViewProps } from './types'
+import { validateCaption, validateFileName, VALIDATION_LIMITS } from '@/lib/validation'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -20,11 +21,24 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
   const [showAlignMenu, setShowAlignMenu] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [captionError, setCaptionError] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
   const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+
+  const handleCaptionChange = (newCaption: string) => {
+    const validation = validateCaption(newCaption)
+
+    if (!validation.isValid && validation.error) {
+      setCaptionError(validation.error)
+    } else {
+      setCaptionError(null)
+    }
+
+    updateAttributes({ caption: validation.sanitized })
+  }
 
   const alignments = {
     left: { icon: AlignLeft, label: 'Left' },
@@ -50,12 +64,22 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
   }, [showAlignMenu])
 
   const validateFile = (file: File): string | null => {
+    // Validate file name
+    const fileNameValidation = validateFileName(file.name)
+    if (!fileNameValidation.isValid) {
+      return fileNameValidation.error || 'Invalid file name'
+    }
+
+    // Validate file type
     if (!ALLOWED_TYPES.includes(file.type)) {
       return 'Invalid file type. Please upload a JPEG, PNG, GIF, or WebP image.'
     }
+
+    // Validate file size
     if (file.size > MAX_FILE_SIZE) {
       return `File size exceeds 10MB. Your file is ${(file.size / 1024 / 1024).toFixed(2)}MB.`
     }
+
     return null
   }
 
@@ -220,15 +244,28 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
           />
         </div>
       </div>
-      <input
-        type="text"
-        value={caption}
-        onChange={(e) => updateAttributes({ caption: e.target.value })}
-        placeholder="Add a caption..."
-        aria-label="Image caption"
-        className="image-caption"
-        contentEditable={false}
-      />
+      <div className="w-full">
+        <input
+          type="text"
+          value={caption}
+          onChange={(e) => handleCaptionChange(e.target.value)}
+          placeholder="Add a caption..."
+          aria-label="Image caption"
+          aria-describedby={captionError ? 'caption-error' : undefined}
+          aria-invalid={!!captionError}
+          maxLength={VALIDATION_LIMITS.MAX_CAPTION_LENGTH}
+          className="image-caption"
+          contentEditable={false}
+        />
+        {captionError && (
+          <p id="caption-error" className="text-xs text-red-600 mt-1" role="alert">
+            {captionError}
+          </p>
+        )}
+        <p className="text-xs text-gray-500 mt-1">
+          {caption.length} / {VALIDATION_LIMITS.MAX_CAPTION_LENGTH} characters
+        </p>
+      </div>
     </NodeViewWrapper>
   )
 }
