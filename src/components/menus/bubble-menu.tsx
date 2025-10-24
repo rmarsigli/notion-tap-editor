@@ -67,52 +67,66 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
   return createPortal(
     <div
       ref={menuRef}
+      role="toolbar"
+      aria-label="Text formatting toolbar"
       className="flex items-center gap-1 rounded-lg border border-border bg-white p-1 shadow-lg z-50"
       style={{ position: 'fixed', display: 'none' }}
     >
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`p-2 rounded transition-colors cursor-pointer ${
+        aria-label="Toggle bold"
+        aria-pressed={editor.isActive('bold')}
+        title="Bold (Ctrl+B)"
+        className={`p-2 rounded transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
           editor.isActive('bold')
             ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
             : 'text-gray-600 hover:bg-gray-100'
         }`}
         type="button"
       >
-        <Bold className="w-4 h-4" />
+        <Bold className="w-4 h-4" aria-hidden="true" />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={`p-2 rounded transition-colors cursor-pointer ${
+        aria-label="Toggle italic"
+        aria-pressed={editor.isActive('italic')}
+        title="Italic (Ctrl+I)"
+        className={`p-2 rounded transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
           editor.isActive('italic')
             ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
             : 'text-gray-600 hover:bg-gray-100'
         }`}
         type="button"
       >
-        <Italic className="w-4 h-4" />
+        <Italic className="w-4 h-4" aria-hidden="true" />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleStrike().run()}
-        className={`p-2 rounded transition-colors cursor-pointer ${
+        aria-label="Toggle strikethrough"
+        aria-pressed={editor.isActive('strike')}
+        title="Strikethrough"
+        className={`p-2 rounded transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
           editor.isActive('strike')
             ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
             : 'text-gray-600 hover:bg-gray-100'
         }`}
         type="button"
       >
-        <Strikethrough className="w-4 h-4" />
+        <Strikethrough className="w-4 h-4" aria-hidden="true" />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleCode().run()}
-        className={`p-2 rounded transition-colors cursor-pointer ${
+        aria-label="Toggle code"
+        aria-pressed={editor.isActive('code')}
+        title="Inline code"
+        className={`p-2 rounded transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
           editor.isActive('code')
             ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
             : 'text-gray-600 hover:bg-gray-100'
         }`}
         type="button"
       >
-        <Code className="w-4 h-4" />
+        <Code className="w-4 h-4" aria-hidden="true" />
       </button>
     </div>,
     document.body

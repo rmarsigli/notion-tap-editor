@@ -51,30 +51,35 @@ const CalloutComponent = ({ node, updateAttributes }: CalloutNodeViewProps) => {
   }, [showTypeMenu])
 
   return (
-    <NodeViewWrapper className={`callout callout-${type}`}>
+    <NodeViewWrapper className={`callout callout-${type}`} role="note" aria-label={`${labels[type as keyof typeof labels]} callout`}>
       <div className="callout-icon-wrapper">
         <button
           onClick={() => setShowTypeMenu(!showTypeMenu)}
-          className="callout-icon-button"
+          aria-label={`Change callout type. Current type: ${labels[type as keyof typeof labels]}`}
+          aria-haspopup="menu"
+          aria-expanded={showTypeMenu}
+          className="callout-icon-button focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           contentEditable={false}
           type="button"
         >
-          <Icon className="w-5 h-5" />
-          <ChevronDown className="w-3 h-3 opacity-60" />
+          <Icon className="w-5 h-5" aria-hidden="true" />
+          <ChevronDown className="w-3 h-3 opacity-60" aria-hidden="true" />
         </button>
         {showTypeMenu && (
-          <div ref={menuRef} className="callout-type-menu" contentEditable={false}>
+          <div ref={menuRef} role="menu" aria-label="Callout type menu" className="callout-type-menu" contentEditable={false}>
             {Object.entries(icons).map(([key, IconComponent]) => (
               <button
                 key={key}
+                role="menuitem"
                 onClick={() => {
                   updateAttributes({ type: key })
                   setShowTypeMenu(false)
                 }}
-                className={`callout-type-option ${type === key ? 'active' : ''}`}
+                aria-label={`Change to ${labels[key as keyof typeof labels]} callout`}
+                className={`callout-type-option focus:outline-none focus:ring-2 focus:ring-blue-500 ${type === key ? 'active' : ''}`}
                 type="button"
               >
-                <IconComponent className="w-4 h-4" />
+                <IconComponent className="w-4 h-4" aria-hidden="true" />
                 <span>{labels[key as keyof typeof labels]}</span>
               </button>
             ))}

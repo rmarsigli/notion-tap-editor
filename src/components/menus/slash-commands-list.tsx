@@ -78,27 +78,36 @@ export const SlashCommandsList = forwardRef((props: SlashCommandsListProps, ref)
   }))
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden w-72 slash-commands-menu">
+    <div
+      role="menu"
+      aria-label="Insert block menu"
+      className="bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden w-72 slash-commands-menu"
+    >
       <div className="p-1">
         {props.items.length === 0 ? (
-          <div className="px-3 py-2 text-sm text-gray-500">No results</div>
+          <div className="px-3 py-2 text-sm text-gray-500" role="status">No results</div>
         ) : (
           props.items.map((item, index) => {
             const Icon = iconMap[item.icon]
             return (
               <button
                 key={index}
+                role="menuitem"
                 onClick={() => selectItem(index)}
-                className={`w-full text-left px-3 py-2 rounded-md flex items-start gap-3 transition-colors cursor-pointer ${
+                aria-label={`Insert ${item.title}: ${item.description}`}
+                className={`w-full text-left px-3 py-2 rounded-md flex items-start gap-3 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   index === selectedIndex
                     ? 'bg-gray-100'
                     : 'hover:bg-gray-50'
                 }`}
                 type="button"
               >
-                <div className={`w-10 h-10 rounded-md flex items-center justify-center flex-shrink-0 ${
-                  index === selectedIndex ? 'bg-white border border-gray-200' : 'bg-gray-100'
-                }`}>
+                <div
+                  className={`w-10 h-10 rounded-md flex items-center justify-center flex-shrink-0 ${
+                    index === selectedIndex ? 'bg-white border border-gray-200' : 'bg-gray-100'
+                  }`}
+                  aria-hidden="true"
+                >
                   {Icon && <Icon className="w-5 h-5 text-gray-600" />}
                 </div>
                 <div className="flex-1 min-w-0 pt-1">

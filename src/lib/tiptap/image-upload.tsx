@@ -125,23 +125,33 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
     return (
       <NodeViewWrapper className="image-upload-wrapper">
         <div
+          role="button"
+          tabIndex={0}
+          aria-label="Upload image. Click or drag and drop to upload"
           className={`image-upload-placeholder ${isDragging ? 'dragging' : ''} ${error ? 'error' : ''}`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onClick={() => fileInputRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              fileInputRef.current?.click()
+            }
+          }}
         >
-          <Upload className="w-8 h-8 mb-2 opacity-50" />
+          <Upload className="w-8 h-8 mb-2 opacity-50" aria-hidden="true" />
           <p className="text-sm opacity-70 mb-1">Click to upload or drag and drop</p>
           <p className="text-xs opacity-50">PNG, JPG, GIF, WebP up to 10MB</p>
           {error && (
-            <p className="text-xs text-red-600 mt-2 font-medium">{error}</p>
+            <p className="text-xs text-red-600 mt-2 font-medium" role="alert">{error}</p>
           )}
           <input
             ref={fileInputRef}
             type="file"
             accept="image/jpeg,image/png,image/gif,image/webp"
             onChange={handleFileChange}
+            aria-label="Choose image file"
             className="hidden"
           />
         </div>
@@ -152,33 +162,38 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
   const AlignIcon = alignments[align as keyof typeof alignments]?.icon || AlignCenter
 
   return (
-    <NodeViewWrapper className={`image-upload-wrapper align-${align}`}>
+    <NodeViewWrapper className={`image-upload-wrapper align-${align}`} role="figure">
       <div className="image-container">
-        <img src={src} alt={caption} className="uploaded-image" />
-        <div className="image-controls">
+        <img src={src} alt={caption || 'Uploaded image'} className="uploaded-image" />
+        <div className="image-controls" role="toolbar" aria-label="Image controls">
           <div className="relative">
             <button
               onClick={() => setShowAlignMenu(!showAlignMenu)}
-              className="image-align-button"
+              aria-label={`Change image alignment. Current: ${alignments[align as keyof typeof alignments]?.label}`}
+              aria-haspopup="menu"
+              aria-expanded={showAlignMenu}
+              className="image-align-button focus:outline-none focus:ring-2 focus:ring-blue-500"
               contentEditable={false}
               type="button"
             >
-              <AlignIcon className="w-4 h-4" />
-              <ChevronDown className="w-3 h-3" />
+              <AlignIcon className="w-4 h-4" aria-hidden="true" />
+              <ChevronDown className="w-3 h-3" aria-hidden="true" />
             </button>
             {showAlignMenu && (
-              <div ref={menuRef} className="image-align-menu" contentEditable={false}>
+              <div ref={menuRef} role="menu" aria-label="Image alignment menu" className="image-align-menu" contentEditable={false}>
                 {Object.entries(alignments).map(([key, { icon: Icon, label }]) => (
                   <button
                     key={key}
+                    role="menuitem"
                     onClick={() => {
                       updateAttributes({ align: key })
                       setShowAlignMenu(false)
                     }}
-                    className={`image-align-option ${align === key ? 'active' : ''}`}
+                    aria-label={`Align image ${label.toLowerCase()}`}
+                    className={`image-align-option focus:outline-none focus:ring-2 focus:ring-blue-500 ${align === key ? 'active' : ''}`}
                     type="button"
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-4 h-4" aria-hidden="true" />
                     <span>{label}</span>
                   </button>
                 ))}
@@ -187,18 +202,20 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
           </div>
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="image-replace-button"
+            aria-label="Replace image"
+            className="image-replace-button focus:outline-none focus:ring-2 focus:ring-blue-500"
             contentEditable={false}
             type="button"
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className="w-4 h-4" aria-hidden="true" />
             Replace
           </button>
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept="image/jpeg,image/png,image/gif,image/webp"
             onChange={handleFileChange}
+            aria-label="Choose replacement image"
             className="hidden"
           />
         </div>
@@ -208,6 +225,7 @@ const ImageUploadComponent = ({ node, updateAttributes }: ImageUploadNodeViewPro
         value={caption}
         onChange={(e) => updateAttributes({ caption: e.target.value })}
         placeholder="Add a caption..."
+        aria-label="Image caption"
         className="image-caption"
         contentEditable={false}
       />
